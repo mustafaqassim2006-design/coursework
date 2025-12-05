@@ -3,6 +3,7 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 
+from ai_helper import ask_cyber_assistant
 from services.tickets_service import TicketService
 
 ticket_service = TicketService()
@@ -197,6 +198,45 @@ def visualisations(df: pd.DataFrame):
     )
     st.plotly_chart(fig3, use_container_width=True)
 
+def build_it_context(df: pd.DataFrame) -> str:
+    """
+    Build a natural-language summary for the IT Dashboard
+    from it_tickets.
+    """
+    if df.empty:
+        return "There are currently no IT tickets."
+
+    total = len(df)
+
+    by_priority = (
+        df["priority"].value_counts().to_dict()
+        if "priority" in df.columns
+        else {}
+    )
+    by_status = (
+        df["status"].value_counts().to_dict()
+        if "status" in df.columns
+        else {}
+    )
+    by_category = (
+        df["category"].value_counts().to_dict()
+        if "category" in df.columns
+        else {}
+    )
+
+    lines = f"Total IT tickets: {total}."
+    if by_priority:
+        pr_parts = ", ".join(f"{k}: {v}" for k, v in by_priority.items())
+        lines += f" By priority: {pr_parts}."
+    if by_status:
+        st_parts = ", ".join(f"{k}: {v}" for k, v in by_status.items())
+        lines += f" By status: {st_parts}."
+    if by_category:
+        cat_parts = ", ".join(f"{k}: {v}" for k, v in by_category.items())
+        lines += f" By category: {cat_parts}."
+
+    return lines
+
 
 def dashboard():
     user = require_login()
@@ -228,6 +268,28 @@ def dashboard():
 
     update_delete_section(df_f)
     visualisations(df_f)
+
+    # --- AI Assistant section ---
+    st.markdown("### 🔎 AI IT Support Assistant")
+
+    with st.expander("Ask questions about the IT tickets (ChatGPT-powered)", expanded=False):
+        st.caption(
+            "Example questions: "
+            "`Which priority level should be resolved first?`, "
+            "`Why are Open tickets increasing?`, "
+            "`How are issues distributed by category?`"
+        )
+        user_q = st.text_area("Your question", key="ai_it_question", height=100)
+
+        if st.button("Ask AI (IT)", key="ai_it_button"):
+            if not user_q.strip():
+                st.warning("Please enter a question first.")
+            else:
+                context = build_it_context(df_f)
+                with st.spinner("Contacting AI assistant..."):
+                    answer = ask_cyber_assistant(user_q, context)
+                st.markdown("**Assistant response:**")
+                st.write(answer)
 
 
 if __name__ == "__main__":

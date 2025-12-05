@@ -3,6 +3,7 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 
+from ai_helper import ask_cyber_assistant
 from services.datasets_service import DatasetService
 
 dataset_service = DatasetService()
@@ -163,6 +164,43 @@ def visualisations(df: pd.DataFrame):
         fig3 = px.line(ts, x="created_at", y="total_size_mb", title="Storage growth over time (MB)")
         st.plotly_chart(fig3, use_container_width=True)
 
+def build_data_context(df: pd.DataFrame) -> str:
+    """
+    Build a natural-language summary for the Data Dashboard
+    from the datasets table.
+    """
+    if df.empty:
+        return "There are currently no datasets in the catalog."
+
+    total = len(df)
+
+    # Ensure numeric columns
+    df_num = df.copy()
+    df_num["size_mb"] = pd.to_numeric(df_num["size_mb"], errors="coerce")
+    df_num["row_count"] = pd.to_numeric(df_num["row_count"], errors="coerce")
+
+    total_rows = int(df_num["row_count"].sum(skipna=True)) if "row_count" in df_num.columns else None
+    total_size = float(df_num["size_mb"].sum(skipna=True)) if "size_mb" in df_num.columns else None
+
+    by_owner = df["owner"].value_counts().to_dict() if "owner" in df.columns else {}
+    by_source = df["source_system"].value_counts().to_dict() if "source_system" in df.columns else {}
+
+    lines = f"Total datasets: {total}."
+    if total_rows is not None:
+        lines += f" Total rows across all datasets: {total_rows:,}."
+    if total_size is not None:
+        lines += f" Total size: {total_size:,.2f} MB."
+
+    if by_owner:
+        owner_parts = ", ".join(f"{k}: {v}" for k, v in by_owner.items())
+        lines += f" By owner: {owner_parts}."
+    if by_source:
+        src_parts = ", ".join(f"{k}: {v}" for k, v in by_source.items())
+        lines += f" By source system: {src_parts}."
+
+    return lines
+
+
 
 def dashboard():
     user = require_login()
@@ -194,6 +232,28 @@ def dashboard():
     update_delete_section(df_f)
     visualisations(df_f)
 
+   # --- AI Assistant section ---
+    st.markdown("### 🔎 AI Data Assistant")
+
+    with st.expander("Ask questions about the datasets (ChatGPT-powered)", expanded=False):
+        st.caption(
+            "Example questions: "
+            "`Which dataset is most important?`, "
+            "`What categories dominate our catalog?`, "
+            "`Are we storing too much large-sized data?`"
+        )
+        user_q = st.text_area("Your question", key="ai_data_question", height=100)
+
+        if st.button("Ask AI (Data)", key="ai_data_button"):
+            if not user_q.strip():
+                st.warning("Please enter a question first.")
+            else:
+                # Use the filtered dataframe from this page
+                context = build_data_context(df_f)
+                with st.spinner("Contacting AI assistant..."):
+                    answer = ask_cyber_assistant(user_q, context)
+                st.markdown("**Assistant response:**")
+                st.write(answer)
 
 if __name__ == "__main__":
     dashboard()
