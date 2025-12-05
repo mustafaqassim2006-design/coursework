@@ -1,0 +1,11 @@
+incident_id,incident_type,severity,status,reported_at,resolved_at,assigned_to,description
+INC1001,Phishing,High,Open,2025-01-10,,Alice,"Suspicious email reported by employee"
+INC1002,Ransomware,Critical,In Progress,2025-01-11,,Bob,"Encrypted files detected on server"
+INC1003,Malware,Medium,Resolved,2025-01-05,2025-01-06,Charlie,"Malicious executable quarantined"
+INC1004,Brute Force,Low,Closed,2025-01-01,2025-01-02,Alice,"Multiple failed login attempts blocked"
+INC1005,Data Leak,High,Open,2025-01-12,,David,"Unusual outbound traffic detected"
+INC1006,DDoS,Critical,In Progress,2025-01-09,,Eve,"High traffic hitting public website"
+INC1007,Unauthorized Access,High,Resolved,2025-01-03,2025-01-04,Bob,"Access from unknown IP location"
+INC1008,Phishing,Low,Closed,2025-01-02,2025-01-03,Charlie,"Employee completed phishing training"
+INC1009,SQL Injection,Critical,Open,2025-01-13,,David,"Suspicious SQL patterns in logs"
+INC1010,Malware,Medium,Resolved,2025-01-05,2025-01-07,Eve,"Trojan removed from workstation"

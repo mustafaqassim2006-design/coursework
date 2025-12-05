@@ -1,0 +1,11 @@
+dataset_name,owner,source_system,size_mb,row_count,created_at
+Customer_Info,Analytics,CRM,120.5,50000,2024-12-01
+Sales_2024,Finance,ERP,89.2,30000,2024-12-15
+Sensor_Readings,IoT,EdgeDevice,450.0,1000000,2024-11-20
+Employee_Records,HR,HRMS,35.7,1200,2024-10-10
+Web_Logs,Security,WebServer,780.3,2500000,2024-12-05
+Inventory_Levels,Operations,WarehouseDB,60.4,15000,2024-12-18
+Transactions_Q4,Finance,PaymentsDB,210.9,800000,2024-12-22
+App_Usage_Data,MobileTeam,AppServer,95.6,900000,2024-12-08
+Product_Catalog,Marketing,ProductDB,40.5,700,2024-11-30
+Support_Tickets,IT,HelpdeskSystem,55.2,6200,2024-12-12

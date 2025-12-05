@@ -1,5 +1,5 @@
 from pathlib import Path
-from db import DatabaseManager 
+from .db import DatabaseManager 
 
 # USERS 
 def insert_user(db : DatabaseManager, username: str, password_hash: str, role: str):

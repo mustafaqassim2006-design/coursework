@@ -1,6 +1,6 @@
 from pathlib import Path
 import pandas as pd
-from db import DatabaseManager
+from DB.db import DatabaseManager
 
 DATA_DIR = Path("DATA")
 

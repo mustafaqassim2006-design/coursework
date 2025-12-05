@@ -1,0 +1,11 @@
+ticket_id,category,priority,status,opened_at,closed_at,assigned_to
+TCK1001,Password Reset,Low,Resolved,2025-01-02,2025-01-02,Alice
+TCK1002,Network Issue,High,In Progress,2025-01-10,,Bob
+TCK1003,Email Error,Medium,Open,2025-01-12,,Charlie
+TCK1004,Software Install,Low,Closed,2025-01-05,2025-01-06,Eve
+TCK1005,VPN Access,High,Resolved,2025-01-01,2025-01-02,David
+TCK1006,Printer Issue,Low,Open,2025-01-11,,Alice
+TCK1007,System Crash,Critical,In Progress,2025-01-09,,Bob
+TCK1008,Access Request,Medium,Closed,2025-01-03,2025-01-04,Charlie
+TCK1009,Slow Performance,Medium,Open,2025-01-06,,David
+TCK1010,WiFi Problem,High,Resolved,2025-01-04,2025-01-04,Eve

@@ -1,4 +1,4 @@
-from db import DatabaseManager as DM
+from .db import DatabaseManager as DM
 
 def create_tables(db: DM):
     c = db.cursor()
